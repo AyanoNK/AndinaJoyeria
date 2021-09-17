@@ -2,10 +2,19 @@ import React, { useEffect, FC } from "react"
 import { FlatList, TextStyle, View, ViewStyle, ImageStyle } from "react-native"
 import { StackScreenProps } from "@react-navigation/stack"
 import { observer } from "mobx-react-lite"
-import { Header, Screen, Text, AutoImage as Image, GradientBackground } from "../../components"
+import {
+  Header,
+  Screen,
+  Text,
+  AutoImage as Image,
+  GradientBackground,
+  Button,
+} from "../../components"
 import { color, spacing } from "../../theme"
 import { useStores } from "../../models"
 import { NavigatorParamList } from "../../navigators"
+import { TextInput } from "react-native-gesture-handler"
+import { Ring } from "../../../assets/images/Rings/Golden/ring1"
 
 const FULL: ViewStyle = {
   flex: 1,
@@ -68,18 +77,12 @@ export const DemoListScreen: FC<StackScreenProps<NavigatorParamList, "demoList">
             style={HEADER}
             titleStyle={HEADER_TITLE}
           />
-          <FlatList
-            contentContainerStyle={FLAT_LIST}
-            data={[...characters]}
-            keyExtractor={(item) => String(item.id)}
-            renderItem={({ item }) => (
-              <View style={LIST_CONTAINER}>
-                <Image source={{ uri: item.image }} style={IMAGE} />
-                <Text style={LIST_TEXT}>
-                  {item.name} ({item.status})
-                </Text>
-              </View>
-            )}
+
+          <TextInput placeholder="Text input" style={{ height: 50, backgroundColor: "white" }} />
+          <Button text="Agregar" />
+          <Image
+            source={require("../../../assets/images/Rings/Golden/ring1.webp")}
+            style={{ width: 410, height: 410 }}
           />
         </Screen>
       </View>
