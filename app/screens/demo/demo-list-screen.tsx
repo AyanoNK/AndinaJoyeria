@@ -14,7 +14,6 @@ import { color, spacing } from "../../theme"
 import { useStores } from "../../models"
 import { NavigatorParamList } from "../../navigators"
 import { TextInput } from "react-native-gesture-handler"
-import { Ring } from "../../../assets/images/Rings/Golden/ring1"
 
 const FULL: ViewStyle = {
   flex: 1,
