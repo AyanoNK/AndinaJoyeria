@@ -25,7 +25,7 @@
     "windowsReactotronHint": "If this doesn't work, ensure the Reactotron desktop app is running and reload app."
   },
   "demoListScreen": {
-    "title": "Demo List"
+    "title": "Lista de Productos"
   },
   "storybook": {
     "placeholder": "Placeholder",

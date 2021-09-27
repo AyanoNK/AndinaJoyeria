@@ -21,6 +21,10 @@ const FULL: ViewStyle = {
 const CONTAINER: ViewStyle = {
   backgroundColor: color.transparent,
 }
+const CONTAINER_TEXT: TextStyle = {
+  marginBottom: 5,
+  marginTop: 5,
+}
 const HEADER: TextStyle = {
   paddingBottom: spacing[5] - 1,
   paddingHorizontal: spacing[4],
@@ -33,33 +37,14 @@ const HEADER_TITLE: TextStyle = {
   lineHeight: 15,
   textAlign: "center",
 }
-const LIST_CONTAINER: ViewStyle = {
-  alignItems: "center",
-  flexDirection: "row",
-  padding: 10,
-}
-const IMAGE: ImageStyle = {
-  borderRadius: 35,
-  height: 65,
-  width: 65,
-}
-const LIST_TEXT: TextStyle = {
-  marginLeft: 10,
-}
-const FLAT_LIST: ViewStyle = {
-  paddingHorizontal: spacing[4],
-}
 
 export const DemoListScreen: FC<StackScreenProps<NavigatorParamList, "demoList">> = observer(
   ({ navigation }) => {
     const goBack = () => navigation.goBack()
 
-    const { characterStore } = useStores()
-    const { characters } = characterStore
-
     useEffect(() => {
       async function fetchData() {
-        await characterStore.getCharacters()
+        // await characterStore.getCharacters()
       }
 
       fetchData()
@@ -76,13 +61,27 @@ export const DemoListScreen: FC<StackScreenProps<NavigatorParamList, "demoList">
             style={HEADER}
             titleStyle={HEADER_TITLE}
           />
-
-          <TextInput placeholder="Text input" style={{ height: 50, backgroundColor: "white" }} />
-          <Button text="Agregar" />
-          <Image
-            source={require("../../../assets/images/Rings/Golden/ring1.webp")}
-            style={{ width: 410, height: 410 }}
-          />
+          <View style={CONTAINER}>
+            <Text text="Producto 1" style={CONTAINER_TEXT} />
+          </View>
+          <View style={CONTAINER}>
+            <Text text="Producto 2" style={CONTAINER_TEXT} />
+          </View>
+          <View style={CONTAINER}>
+            <Text text="Producto 3" style={CONTAINER_TEXT} />
+          </View>
+          <View style={CONTAINER}>
+            <Text text="Producto 4" style={CONTAINER_TEXT} />
+          </View>
+          <View style={CONTAINER}>
+            <Text text="Producto 5" style={CONTAINER_TEXT} />
+          </View>
+          <View style={CONTAINER}>
+            <Text text="Producto 6" style={CONTAINER_TEXT} />
+          </View>
+          <Button>
+            <Text text="Agregar producto" style={CONTAINER_TEXT} />
+          </Button>
         </Screen>
       </View>
     )
