@@ -1,7 +1,11 @@
 {
+  "name": "andinajoyeria",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "start": "expo start",
+    "ios": "expo start --ios",
+    "android": "expo start --android",
     "test:e2e": "./bin/downloadExpoApp.sh && detox test --configuration ios.sim.expo",
     "build:e2e": "detox build -c ios.sim.expo",
     "ci:test:e2e": "detox test -c ios.sim.release -l verbose --cleanup",
@@ -22,8 +26,6 @@
     "build-android": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res",
     "clean": "react-native-clean-project",
     "clean-all": "npx react-native clean-project-auto",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
     "web": "expo start --web",
     "eject": "expo eject"
   },
