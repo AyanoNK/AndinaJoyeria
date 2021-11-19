@@ -17,15 +17,15 @@ export const typography = {
   /**
    * The primary font.  Used in most places.
    */
-  primary: Platform.select({ ios: "Helvetica", android: "normal" }),
+  primary: Platform.select({ default: "monospace" }),
 
   /**
    * An alternate font used for perhaps titles and stuff.
    */
-  secondary: Platform.select({ ios: "Arial", android: "sans-serif" }),
+  secondary: Platform.select({ default: "monospace" }),
 
   /**
    * Lets get fancy with a monospace font!
    */
-  code: Platform.select({ ios: "Courier", android: "monospace" }),
+  code: Platform.select({ default: "monospace" }),
 }
