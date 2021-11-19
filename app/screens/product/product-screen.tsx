@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
-import { View, ViewStyle } from "react-native"
+import { FlatList, View, ViewStyle } from "react-native"
 import { Screen, Text } from "../../components"
 // import { useNavigation } from "@react-navigation/native"
-import { useStores } from "../../models"
+import { Product, useStores } from "../../models"
 import { color, spacing } from "../../theme"
 
 const ROOT: ViewStyle = {
@@ -33,6 +33,15 @@ export const ProductScreen = observer(function ProductScreen() {
     setRefreshing(false)
   }
 
+  const renderProduct = ({ item }) => {
+    const product: Product = item
+    return (
+      <View>
+        <Text text={product.name} />
+      </View>
+    )
+  }
+
   // Pull in navigation via hook
   // const navigation = useNavigation()
   return (
@@ -40,6 +49,13 @@ export const ProductScreen = observer(function ProductScreen() {
       <View style={HEADER_CONTAINER}>
         <Text preset="header" tx="productScreen.header" />
       </View>
+      <FlatList
+        data={productStore.products}
+        renderItem={renderProduct}
+        keyExtractor={(item) => item.id}
+        onRefresh={fetchProducts}
+        refreshing={refreshing}
+      />
     </Screen>
   )
 })
