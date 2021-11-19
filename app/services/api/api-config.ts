@@ -22,6 +22,8 @@ export interface ApiConfig {
  * The default configuration for the app.
  */
 export const DEFAULT_API_CONFIG: ApiConfig = {
-  url: API_URL || "https://jsonplaceholder.typicode.com",
+  url:
+    API_URL ||
+    "https://firestore.googleapis.com/v1/projects/andina-joyeria/databases/(default)/documents",
   timeout: 10000,
 }

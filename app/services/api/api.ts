@@ -2,6 +2,22 @@ import { ApisauceInstance, create, ApiResponse } from "apisauce"
 import { getGeneralApiProblem } from "./api-problem"
 import { ApiConfig, DEFAULT_API_CONFIG } from "./api-config"
 import * as Types from "./api.types"
+import { ProductSnapshot } from "../../models"
+import * as uuid from "react-native-uuid"
+
+const convertProduct = (raw: any): ProductSnapshot => {
+  const id = uuid.default.v4().toString()
+
+  raw = raw.documents.fields
+
+  return {
+    id: id,
+    name: raw.name.stringValue,
+    price: +raw.price.integerValue,
+    stock: +raw.stock.integerValue,
+    picture: raw.picture.stringValue,
+  }
+}
 
 /**
  * Manages all requests to the API.
@@ -42,6 +58,26 @@ export class Api {
         Accept: "application/json",
       },
     })
+  }
+
+  async getProducts(): Promise<Types.GetProductsResult> {
+    // make the api call
+    const response: ApiResponse<any> = await this.apisauce.get(`/documents/product`)
+
+    // the typical ways to die when calling an api
+    if (!response.ok) {
+      const problem = getGeneralApiProblem(response)
+      if (problem) return problem
+    }
+
+    // transform the data into the format we are expecting
+    try {
+      const rawProducts = response.data
+      const resultProducts: ProductSnapshot[] = rawProducts.map(convertProduct)
+      return { kind: "ok", products: resultProducts }
+    } catch {
+      return { kind: "bad-data" }
+    }
   }
 
   /**

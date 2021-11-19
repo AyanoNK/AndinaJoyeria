@@ -12,6 +12,9 @@
     "readyForLaunch": "Ready for launch.",
     "continue": "CONTINUE"
   },
+  "productScreen": {
+    "header": "Products"
+  },
   "demoScreen": {
     "howTo": "HOW TO",
     "title": "What’s In This Stack?",
