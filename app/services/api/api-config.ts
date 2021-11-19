@@ -1,7 +1,8 @@
 // Use this import if you want to use "env.js" file
 // const { API_URL } = require("../../config/env")
 // Or just specify it directly like this:
-const API_URL = "http://example.com"
+const API_URL =
+  "https://firestore.googleapis.com/v1/projects/andina-joyeria/databases/(default)/documents"
 
 /**
  * The options used to configure the API.
@@ -22,8 +23,6 @@ export interface ApiConfig {
  * The default configuration for the app.
  */
 export const DEFAULT_API_CONFIG: ApiConfig = {
-  url:
-    API_URL ||
-    "https://firestore.googleapis.com/v1/projects/andina-joyeria/databases/(default)/documents",
+  url: API_URL,
   timeout: 10000,
 }

@@ -3,12 +3,12 @@ import { getGeneralApiProblem } from "./api-problem"
 import { ApiConfig, DEFAULT_API_CONFIG } from "./api-config"
 import * as Types from "./api.types"
 import { ProductSnapshot } from "../../models"
-import * as uuid from "react-native-uuid"
+import uuid from "react-native-uuid"
 
 const convertProduct = (raw: any): ProductSnapshot => {
-  const id = uuid.default.v4().toString()
+  const id = uuid.v4().toString()
 
-  raw = raw.documents.fields
+  raw = raw.fields
 
   return {
     id: id,
@@ -62,8 +62,7 @@ export class Api {
 
   async getProducts(): Promise<Types.GetProductsResult> {
     // make the api call
-    const response: ApiResponse<any> = await this.apisauce.get(`/documents/product`)
-
+    const response: ApiResponse<any> = await this.apisauce.get("/product")
     // the typical ways to die when calling an api
     if (!response.ok) {
       const problem = getGeneralApiProblem(response)
@@ -72,7 +71,7 @@ export class Api {
 
     // transform the data into the format we are expecting
     try {
-      const rawProducts = response.data
+      const rawProducts = response.data.documents
       const resultProducts: ProductSnapshot[] = rawProducts.map(convertProduct)
       return { kind: "ok", products: resultProducts }
     } catch {

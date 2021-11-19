@@ -6,7 +6,7 @@ import { ProductStoreModel, ProductStore } from "../product-store/product-store"
  */
 // prettier-ignore
 export const RootStoreModel = types.model("RootStore").props({
-  productStore: types.optional(ProductStoreModel, {} as ProductStore)
+  productStore: types.optional(ProductStoreModel, {} as ProductStore),
 })
 
 /**

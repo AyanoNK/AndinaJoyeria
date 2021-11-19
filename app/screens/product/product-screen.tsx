@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite"
 import { View, ViewStyle } from "react-native"
 import { Screen, Text } from "../../components"
 // import { useNavigation } from "@react-navigation/native"
-// import { useStores } from "../../models"
+import { useStores } from "../../models"
 import { color, spacing } from "../../theme"
 
 const ROOT: ViewStyle = {
@@ -20,20 +20,18 @@ const HEADER_CONTAINER: ViewStyle = {
 export const ProductScreen = observer(function ProductScreen() {
   // Pull in one of our MST stores
   // const { someStore, anotherStore } = useStores()
-  // const { productStore } = useStores()
+  const { productStore } = useStores()
   const [refreshing, setRefreshing] = useState(false)
 
-  // useEffect(() => {
-  //   fetchProducts()
-  // }, [])
+  useEffect(() => {
+    fetchProducts()
+  }, [])
 
-  // const fetchProducts = () => {
-  //   setRefreshing(true)
-  //   productStore.getProducts()
-  //   setRefreshing(false)
-  // }
-
-  // console.log(productStore.products)
+  const fetchProducts = () => {
+    setRefreshing(true)
+    productStore.getProducts()
+    setRefreshing(false)
+  }
 
   // Pull in navigation via hook
   // const navigation = useNavigation()

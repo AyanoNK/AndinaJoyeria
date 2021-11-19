@@ -1,6 +1,6 @@
 import { flow } from "mobx"
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
-import { Product, ProductModel, ProductSnapshot } from ".."
+import { Product, ProductModel, ProductSnapshot } from "../product/product"
 import { withEnvironment } from "../extensions/with-environment"
 import { GetProductsResult } from "../../services/api"
 
