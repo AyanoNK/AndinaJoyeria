@@ -1,6 +1,4 @@
-import { flow } from "mobx"
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
-import { ProductModel } from "../product/product"
 
 /**
  * Model description here for TypeScript hints.
