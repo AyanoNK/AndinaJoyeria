@@ -2,20 +2,28 @@ import { ApisauceInstance, create, ApiResponse } from "apisauce"
 import { getGeneralApiProblem } from "./api-problem"
 import { ApiConfig, DEFAULT_API_CONFIG } from "./api-config"
 import * as Types from "./api.types"
-import { ProductSnapshot } from "../../models"
-import uuid from "react-native-uuid"
+import { ProductSnapshot, SaleSnapshot } from "../../models"
 
 const convertProduct = (raw: any): ProductSnapshot => {
-  const id = uuid.v4().toString()
-
-  raw = raw.fields
+  const rawFields = raw.fields
+  return {
+    id: raw.name,
+    name: rawFields.name.stringValue,
+    price: +rawFields.price.integerValue,
+    stock: +rawFields.stock.integerValue,
+    picture: rawFields.picture.stringValue,
+  }
+}
+const convertSale = (raw: any): SaleSnapshot => {
+  const rawFields = raw.fields
 
   return {
-    id: id,
-    name: raw.name.stringValue,
-    price: +raw.price.integerValue,
-    stock: +raw.stock.integerValue,
-    picture: raw.picture.stringValue,
+    id: raw.name,
+    items: rawFields.product.arrayValue.values.map(
+      (product) => product.mapValue.fields.item.referenceValue,
+    ),
+    client_email: rawFields.client_email.stringValue,
+    total: +rawFields.total.integerValue,
   }
 }
 
@@ -74,6 +82,25 @@ export class Api {
       const rawProducts = response.data.documents
       const resultProducts: ProductSnapshot[] = rawProducts.map(convertProduct)
       return { kind: "ok", products: resultProducts }
+    } catch {
+      return { kind: "bad-data" }
+    }
+  }
+
+  async getSales(): Promise<Types.GetSalesResult> {
+    // make the api call
+    const response: ApiResponse<any> = await this.apisauce.get("/sale")
+    // the typical ways to die when calling an api
+    if (!response.ok) {
+      const problem = getGeneralApiProblem(response)
+      if (problem) return problem
+    }
+
+    // transform the data into the format we are expecting
+    try {
+      const rawSales = response.data.documents
+      const resultSales: SaleSnapshot[] = rawSales.map(convertSale)
+      return { kind: "ok", sales: resultSales }
     } catch {
       return { kind: "bad-data" }
     }

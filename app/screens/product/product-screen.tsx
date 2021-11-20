@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite"
 import { FlatList, View, ViewStyle } from "react-native"
 import { Screen, Text } from "../../components"
 // import { useNavigation } from "@react-navigation/native"
-import { Product, useStores } from "../../models"
+import { Product, Sale, useStores } from "../../models"
 import { color, spacing } from "../../theme"
 
 const ROOT: ViewStyle = {
@@ -20,16 +20,22 @@ const HEADER_CONTAINER: ViewStyle = {
 export const ProductScreen = observer(function ProductScreen() {
   // Pull in one of our MST stores
   // const { someStore, anotherStore } = useStores()
-  const { productStore } = useStores()
+  const { productStore, saleStore } = useStores()
   const [refreshing, setRefreshing] = useState(false)
 
   useEffect(() => {
     fetchProducts()
+    fetchSales()
   }, [])
 
   const fetchProducts = () => {
     setRefreshing(true)
     productStore.getProducts()
+    setRefreshing(false)
+  }
+  const fetchSales = () => {
+    setRefreshing(true)
+    saleStore.getSales()
     setRefreshing(false)
   }
 
@@ -38,6 +44,15 @@ export const ProductScreen = observer(function ProductScreen() {
     return (
       <View>
         <Text text={product.name} />
+      </View>
+    )
+  }
+  const renderSale = ({ item }) => {
+    const sale: Sale = item
+    console.tron.log("sales", sale)
+    return (
+      <View>
+        <Text text={sale.client_email} />
       </View>
     )
   }
@@ -54,6 +69,13 @@ export const ProductScreen = observer(function ProductScreen() {
         renderItem={renderProduct}
         keyExtractor={(item) => item.id}
         onRefresh={fetchProducts}
+        refreshing={refreshing}
+      />
+      <FlatList
+        data={saleStore.sales}
+        renderItem={renderSale}
+        keyExtractor={(item) => item.id}
+        onRefresh={fetchSales}
         refreshing={refreshing}
       />
     </Screen>

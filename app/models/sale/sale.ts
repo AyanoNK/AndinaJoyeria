@@ -1,11 +1,18 @@
+import { flow } from "mobx"
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
+import { ProductModel } from "../product/product"
 
 /**
  * Model description here for TypeScript hints.
  */
 export const SaleModel = types
   .model("Sale")
-  .props({})
+  .props({
+    id: types.identifier,
+    items: types.maybe(types.array(types.string)),
+    client_email: types.maybe(types.string),
+    total: types.maybe(types.number),
+  })
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
 
