@@ -13,4 +13,5 @@ export type GetUserResult = { kind: "ok"; user: User } | GeneralApiProblem
 export type GetCharactersResult = { kind: "ok"; characters: Character[] } | GeneralApiProblem
 export type GetCharacterResult = { kind: "ok"; character: Character } | GeneralApiProblem
 export type GetProductsResult = { kind: "ok"; products: ProductSnapshot[] } | GeneralApiProblem
+export type PostProductResult = { kind: "ok"; products: ProductSnapshot[] } | GeneralApiProblem
 export type GetSalesResult = { kind: "ok"; sales: SaleSnapshot[] } | GeneralApiProblem

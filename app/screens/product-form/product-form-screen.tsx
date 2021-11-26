@@ -8,6 +8,7 @@ import { color, spacing } from "../../theme"
 import { useNavigation, CommonActions } from "@react-navigation/core"
 import { Controller, useForm } from "react-hook-form"
 import { translate } from "../../i18n"
+import { useStores } from "../../models"
 
 const ROOT: ViewStyle = {
   flex: 1,
@@ -26,11 +27,18 @@ const INPUT_CONTAINER: ViewStyle = {
 
 export const ProductFormScreen = observer(function ProductFormScreen() {
   // Pull in one of our MST stores
-  // const { someStore, anotherStore } = useStores()
+  const { productStore } = useStores()
 
   // Pull in navigation via hook
   const navigation = useNavigation()
   const previousScreen = () => navigation.dispatch(CommonActions.goBack())
+
+  const SaleScreen = () =>
+    navigation.dispatch(
+      CommonActions.navigate({
+        name: "sale",
+      }),
+    )
 
   const {
     handleSubmit,
@@ -38,8 +46,9 @@ export const ProductFormScreen = observer(function ProductFormScreen() {
     formState: { errors },
   } = useForm()
 
-  const onSubmit = (data) => {
-    console.tron.log(data)
+  const onSubmit = async (data) => {
+    await productStore.postProduct(data).then(() => SaleScreen())
+    SaleScreen()
   }
 
   return (
@@ -63,9 +72,9 @@ export const ProductFormScreen = observer(function ProductFormScreen() {
             value={value}
           />
         )}
-        name="productName"
+        name="name"
       />
-      {errors.productName && <Text>Este texto es requerido.</Text>}
+      {errors.name && <Text>Este texto es requerido.</Text>}
 
       <Text preset="header" tx="productScreen.productPicture" />
 
@@ -83,7 +92,7 @@ export const ProductFormScreen = observer(function ProductFormScreen() {
             value={value}
           />
         )}
-        name="productPicture"
+        name="picture"
       />
 
       <Text preset="header" tx="productScreen.productPrice" />
@@ -103,8 +112,9 @@ export const ProductFormScreen = observer(function ProductFormScreen() {
             keyboardType="numeric"
           />
         )}
-        name="productPrice"
+        name="price"
       />
+      {errors.price && <Text>Este texto es requerido.</Text>}
 
       <Text preset="header" tx="productScreen.productStock" />
 
@@ -123,8 +133,9 @@ export const ProductFormScreen = observer(function ProductFormScreen() {
             keyboardType="numeric"
           />
         )}
-        name="productStock"
+        name="stock"
       />
+      {errors.stock && <Text>Este texto es requerido.</Text>}
 
       <Button testID="next-screen-button" tx="productScreen.return" onPress={previousScreen} />
       <Button

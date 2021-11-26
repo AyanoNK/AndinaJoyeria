@@ -2,7 +2,7 @@ import { ApisauceInstance, create, ApiResponse } from "apisauce"
 import { getGeneralApiProblem } from "./api-problem"
 import { ApiConfig, DEFAULT_API_CONFIG } from "./api-config"
 import * as Types from "./api.types"
-import { ProductSnapshot, SaleSnapshot } from "../../models"
+import { Product, ProductSnapshot, SaleSnapshot } from "../../models"
 
 const convertProduct = (raw: any): ProductSnapshot => {
   const rawFields = raw.fields
@@ -24,6 +24,27 @@ const convertSale = (raw: any): SaleSnapshot => {
     ),
     client_email: rawFields.client_email.stringValue,
     total: +rawFields.total.integerValue,
+  }
+}
+
+const prepareProduct = (product: any) => {
+  return {
+    fields: {
+      name: {
+        stringValue: product.name,
+      },
+      picture: {
+        stringValue: product.picture
+          ? product.picture
+          : "https://scontent.fbog3-1.fna.fbcdn.net/v/t1.18169-9/13255908_1209844265692314_2149408519842123103_n.jpg?_nc_cat=109&ccb=1-5&_nc_sid=730e14&_nc_eui2=AeGwwoObNhQGl36hDDc6_yFLCiVZ0rCXgiEKJVnSsJeCIXgZx7G0PHrCJcFklReonCPbrJG9QJkFbHNJV_gnOTEG&_nc_ohc=eIzv4552eDYAX-v-oMj&_nc_ht=scontent.fbog3-1.fna&oh=6a333082ab18beaeda2e87269a41367a&oe=61B8B42B",
+      },
+      price: {
+        integerValue: parseInt(product.price, 10),
+      },
+      stock: {
+        integerValue: parseInt(product.stock, 10),
+      },
+    },
   }
 }
 
@@ -71,6 +92,25 @@ export class Api {
   async getProducts(): Promise<Types.GetProductsResult> {
     // make the api call
     const response: ApiResponse<any> = await this.apisauce.get("/product")
+    // the typical ways to die when calling an api
+    if (!response.ok) {
+      const problem = getGeneralApiProblem(response)
+      if (problem) return problem
+    }
+
+    // transform the data into the format we are expecting
+    try {
+      const rawProducts = response.data.documents
+      const resultProducts: ProductSnapshot[] = rawProducts.map(convertProduct)
+      return { kind: "ok", products: resultProducts }
+    } catch {
+      return { kind: "bad-data" }
+    }
+  }
+  async postProduct(data: Product): Promise<Types.GetProductsResult> {
+    // make the api call
+    const convertedProduct = prepareProduct(data)
+    const response: ApiResponse<any> = await this.apisauce.post("/product", convertedProduct)
     // the typical ways to die when calling an api
     if (!response.ok) {
       const problem = getGeneralApiProblem(response)

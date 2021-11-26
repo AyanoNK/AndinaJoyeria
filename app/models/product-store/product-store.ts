@@ -2,7 +2,7 @@ import { flow } from "mobx"
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
 import { Product, ProductModel, ProductSnapshot } from "../product/product"
 import { withEnvironment } from "../extensions/with-environment"
-import { GetProductsResult } from "../../services/api"
+import { GetProductsResult, PostProductResult } from "../../services/api"
 
 /**
  * Model description here for TypeScript hints.
@@ -23,6 +23,16 @@ export const ProductStoreModel = types
   .actions((self) => ({
     getProducts: flow(function* () {
       const result: GetProductsResult = yield self.environment.api.getProducts()
+      if (result.kind === "ok") {
+        self.saveProducts(result.products)
+      } else {
+        __DEV__ && console.tron.log(result.kind)
+      }
+    }),
+  }))
+  .actions((self) => ({
+    postProduct: flow(function* (data: Product) {
+      const result: PostProductResult = yield self.environment.api.postProduct(data)
       if (result.kind === "ok") {
         self.saveProducts(result.products)
       } else {
