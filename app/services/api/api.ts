@@ -79,7 +79,6 @@ const prepareSale = (sale: any) => {
     }),
   )
 
-  console.tron.log(dataModeler)
   return dataModeler
 }
 

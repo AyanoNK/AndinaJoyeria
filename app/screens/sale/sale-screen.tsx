@@ -38,20 +38,33 @@ export const SaleScreen = observer(function SaleScreen() {
   const renderSale = ({ item }) => {
     const sale: Sale = item
     return (
-      <View>
-        <Text text={`${sale.total.toString()} a ${sale.client_email}`} />
+      <View style={{ flex: 1, flexDirection: "row" }}>
+        <View style={{ width: "80%" }}>
+          <Text text={`${sale.total.toString()} a ${sale.client_email}`} />
+        </View>
+        <View style={{ width: "20%" }}>
+          <Button
+            testID="next-screen-button"
+            tx="saleScreen.edit"
+            onPress={() => saleFormScreen(item)}
+          />
+        </View>
       </View>
     )
   }
 
   // Pull in navigation via hook
   const navigation = useNavigation()
-  const saleFormScreen = () =>
+  const saleFormScreen = (thisSale) => {
     navigation.dispatch(
       CommonActions.navigate({
         name: "saleForm",
+        params: {
+          sale: thisSale.id,
+        },
       }),
     )
+  }
   const productScreen = () =>
     navigation.dispatch(
       CommonActions.navigate({

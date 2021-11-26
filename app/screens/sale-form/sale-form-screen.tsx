@@ -1,11 +1,11 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { observer } from "mobx-react-lite"
 import { TextInput, View, ViewStyle } from "react-native"
 import { Button, Screen, Text } from "../../components"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "../../models"
 import { color, spacing } from "../../theme"
-import { useNavigation, CommonActions } from "@react-navigation/core"
+import { useNavigation, CommonActions, useRoute } from "@react-navigation/core"
 import { useStores } from "../../models"
 import { Controller, useForm } from "react-hook-form"
 import { translate } from "../../i18n"
@@ -32,18 +32,29 @@ export const SaleFormScreen = observer(function SaleFormScreen() {
 
   // Pull in navigation via hook
   const navigation = useNavigation()
+  const route = useRoute()
+
   const previousScreen = () => navigation.dispatch(CommonActions.goBack())
 
   const getProductDetails = (id: string) => {
     return productStore.products.find((product) => product.id === id)
   }
-
   const {
     handleSubmit,
     control,
     setValue,
     formState: { errors },
   } = useForm()
+
+  useEffect(() => {
+    const param = route.params
+    if ("sale" in param) {
+      const sale = saleStore.sales.find((sale) => sale.id === param["sale"])
+      setValue("items", [sale.items])
+      setValue("client_email", sale.client_email)
+      setValue("total", sale.total)
+    }
+  }, [])
 
   const onSubmit = async (data) => {
     await saleStore.postSale(data).then(() => previousScreen())

@@ -27,7 +27,8 @@
     "seeProducts": "Ver productos",
     "clientEmail": "Email del cliente",
     "quantity": "Cantidad",
-    "add": "Agregar"
+    "add": "Agregar",
+    "edit": "Editar"
   },
   "demoScreen": {
     "howTo": "HOW TO",
