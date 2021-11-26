@@ -136,9 +136,14 @@ export const ProductFormScreen = observer(function ProductFormScreen() {
       />
       {errors.stock && <Text>Este texto es requerido.</Text>}
 
-      <Button testID="next-screen-button" tx="productScreen.return" onPress={previousScreen} />
       <Button
-        testID="next-screen-button"
+        textStyle={{ fontSize: 16 }}
+        style={{ marginTop: 15 }}
+        tx="productScreen.return"
+        onPress={previousScreen}
+      />
+      <Button
+        textStyle={{ fontSize: 16 }}
         style={{ marginTop: 30 }}
         tx="productScreen.add"
         onPress={handleSubmit(onSubmit)}
