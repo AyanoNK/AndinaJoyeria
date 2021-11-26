@@ -5,7 +5,7 @@ import { Button, Screen, Text } from "../../components"
 // import { useNavigation } from "@react-navigation/native"
 import { Product, Sale, useStores } from "../../models"
 import { color, spacing } from "../../theme"
-import { useNavigatio, CommonActions, useNavigation } from "@react-navigation/core"
+import { CommonActions, useNavigation } from "@react-navigation/core"
 
 const ROOT: ViewStyle = {
   flex: 1,

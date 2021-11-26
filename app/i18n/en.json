@@ -15,7 +15,11 @@
   "productScreen": {
     "header": "Productos",
     "add": "Agregar producto",
-    "return": "Volver"
+    "return": "Volver",
+    "productName": "Nombre del producto",
+    "productPrice": "Precio",
+    "productPicture": "URL de la Imagen",
+    "productStock": "Inventario"
   },
   "saleScreen": {
     "header": "Ventas",
