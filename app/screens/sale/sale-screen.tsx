@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
-import { FlatList, TextStyle, TextStyleAndroid, View, ViewStyle } from "react-native"
+import { FlatList, TextStyle, View, ViewStyle } from "react-native"
 import { Button, Screen, Text } from "../../components"
 import { color, spacing } from "../../theme"
 import { Sale, useStores } from "../../models"

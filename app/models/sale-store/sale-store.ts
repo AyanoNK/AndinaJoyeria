@@ -4,7 +4,6 @@ import { withEnvironment } from "../extensions/with-environment"
 import { Sale, SaleSnapshot } from ".."
 import { flow } from "mobx-state-tree"
 import { GetSalesResult, PostSaleResult } from "../../services/api"
-import { SaleFormScreen } from "../../screens"
 
 /**
  * Model description here for TypeScript hints.
