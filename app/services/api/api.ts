@@ -200,6 +200,27 @@ export class Api {
     }
   }
 
+  async updateSale(saleId: string, data: Sale): Promise<Types.GetSalesResult> {
+    // make the api call
+    const convertedSale = prepareSale(data)
+    console.tron.log(saleId, convertedSale)
+    const response: ApiResponse<any> = await this.apisauce.patch(`/sale/${saleId}`, convertedSale)
+    // the typical ways to die when calling an api
+    if (!response.ok) {
+      const problem = getGeneralApiProblem(response)
+      if (problem) return problem
+    }
+
+    // transform the data into the format we are expecting
+    try {
+      const rawSales = response.data.documents
+      const resultSales: SaleSnapshot[] = rawSales.map(convertSale)
+      return { kind: "ok", sales: resultSales }
+    } catch {
+      return { kind: "bad-data" }
+    }
+  }
+
   async deleteSale(sale: string) {
     // make the api call
     const response: ApiResponse<any> = await this.apisauce.delete(`/sale/${sale}`)

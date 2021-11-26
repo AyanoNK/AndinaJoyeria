@@ -33,6 +33,7 @@ export const SaleFormScreen = observer(function SaleFormScreen() {
   // Pull in navigation via hook
   const navigation = useNavigation()
   const route = useRoute()
+  const param = route.params
 
   const previousScreen = () => navigation.dispatch(CommonActions.goBack())
 
@@ -48,11 +49,10 @@ export const SaleFormScreen = observer(function SaleFormScreen() {
 
   useEffect(() => {
     productStore.getProducts()
-    const param = route.params
     if ("sale" in param) {
       const sale = saleStore.sales.find((sale) => sale.id === param["sale"])
       if (sale) {
-        setValue("items", [sale.items])
+        setValue("items", sale.items)
         setValue("client_email", sale.client_email)
         setValue("total", sale.total)
       }
@@ -60,7 +60,11 @@ export const SaleFormScreen = observer(function SaleFormScreen() {
   }, [])
 
   const onSubmit = async (data) => {
-    await saleStore.postSale(data).then(() => previousScreen())
+    if ("sale" in param) {
+      await saleStore.updateSale(param["sale"].split("/").at(-1), data).then(() => previousScreen())
+    } else {
+      await saleStore.postSale(data).then(() => previousScreen())
+    }
   }
 
   return (

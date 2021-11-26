@@ -88,6 +88,7 @@ export const SaleScreen = observer(function SaleScreen() {
           tx="saleScreen.edit"
           onPress={() => saleFormScreen(sale)}
           style={ACTION_BUTTON_STYLE}
+          disabled
         />
         <Button
           tx="saleScreen.delete"

@@ -43,6 +43,16 @@ export const SaleStoreModel = types
     }),
   }))
   .actions((self) => ({
+    updateSale: flow(function* (saleId: string, data: Sale) {
+      const result: PostSaleResult = yield self.environment.api.updateSale(saleId, data)
+      if (result.kind === "ok") {
+        self.saveSales({ ...result.sales, ...data })
+      } else {
+        __DEV__ && console.tron.log(result.kind)
+      }
+    }),
+  }))
+  .actions((self) => ({
     deleteSale: flow(function* (data: string, newSales: Sale[]) {
       const result: PostSaleResult = yield self.environment.api.deleteSale(data)
 
