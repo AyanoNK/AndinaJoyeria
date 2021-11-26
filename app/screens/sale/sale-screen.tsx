@@ -3,9 +3,10 @@ import { observer } from "mobx-react-lite"
 import { FlatList, View, ViewStyle } from "react-native"
 import { Button, Screen, Text } from "../../components"
 // import { useNavigation } from "@react-navigation/native"
-import { Product, Sale, useStores } from "../../models"
+// import { useStores } from "../../models"
 import { color, spacing } from "../../theme"
-import { useNavigatio, CommonActions, useNavigation } from "@react-navigation/core"
+import { Sale, useStores } from "../../models"
+import { useNavigation, CommonActions } from "@react-navigation/core"
 
 const ROOT: ViewStyle = {
   flex: 1,
@@ -18,73 +19,74 @@ const HEADER_CONTAINER: ViewStyle = {
   marginBottom: spacing.medium,
 }
 
-export const ProductScreen = observer(function ProductScreen() {
+export const SaleScreen = observer(function SaleScreen() {
   // Pull in one of our MST stores
   // const { someStore, anotherStore } = useStores()
-  const { productStore, saleStore } = useStores()
+  const { saleStore } = useStores()
   const [refreshing, setRefreshing] = useState(false)
 
   useEffect(() => {
-    fetchProducts()
     fetchSales()
   }, [])
 
-  const fetchProducts = () => {
-    setRefreshing(true)
-    productStore.getProducts()
-    setRefreshing(false)
-  }
   const fetchSales = () => {
     setRefreshing(true)
     saleStore.getSales()
     setRefreshing(false)
   }
 
-  const renderProduct = ({ item }) => {
-    const product: Product = item
-    return (
-      <View>
-        <Text text={product.name} />
-      </View>
-    )
-  }
   const renderSale = ({ item }) => {
     const sale: Sale = item
     return (
       <View>
-        <Text text={sale.client_email} />
+        <Text text={`${sale.total.toString()} a ${sale.client_email}`} />
       </View>
     )
   }
 
+  // Pull in navigation via hook
   const navigation = useNavigation()
-
-  const previousScreen = () => navigation.dispatch(CommonActions.goBack())
-  const productFormScreen = () =>
+  const saleFormScreen = () =>
     navigation.dispatch(
       CommonActions.navigate({
-        name: "productForm",
+        name: "saleForm",
       }),
     )
-  // Pull in navigation via hook
+  const productScreen = () =>
+    navigation.dispatch(
+      CommonActions.navigate({
+        name: "product",
+      }),
+    )
+
+  const previousScreen = () => navigation.dispatch(CommonActions.goBack())
+
   return (
     <Screen style={ROOT} preset="scroll">
       <View style={HEADER_CONTAINER}>
-        <Text preset="header" tx="productScreen.header" />
+        <View style={HEADER_CONTAINER}>
+          <Text preset="header" tx="saleScreen.header" />
+        </View>
+        <FlatList
+          data={saleStore.sales}
+          renderItem={renderSale}
+          keyExtractor={(item) => item.id}
+          onRefresh={fetchSales}
+          refreshing={refreshing}
+        />
       </View>
-      <FlatList
-        data={productStore.products}
-        renderItem={renderProduct}
-        keyExtractor={(item) => item.id}
-        onRefresh={fetchProducts}
-        refreshing={refreshing}
-      />
-      <Button testID="next-screen-button" tx="productScreen.return" onPress={previousScreen} />
+      <Button testID="next-screen-button" tx="saleScreen.add" onPress={saleFormScreen} />
       <Button
         testID="next-screen-button"
         style={{ marginTop: 30 }}
-        tx="productScreen.add"
-        onPress={productFormScreen}
+        tx="saleScreen.return"
+        onPress={previousScreen}
+      />
+      <Button
+        testID="next-screen-button"
+        tx="saleScreen.seeProducts"
+        style={{ marginTop: 30 }}
+        onPress={productScreen}
       />
     </Screen>
   )

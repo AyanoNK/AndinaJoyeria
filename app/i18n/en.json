@@ -10,10 +10,18 @@
   "welcomeScreen": {
     "poweredBy": "POWERED BY IGNITE",
     "readyForLaunch": "Ready for launch.",
-    "continue": "CONTINUE"
+    "continue": "Empezar"
   },
   "productScreen": {
-    "header": "Products"
+    "header": "Productos",
+    "add": "Agregar producto",
+    "return": "Volver"
+  },
+  "saleScreen": {
+    "header": "Ventas",
+    "return": "Volver",
+    "seeProducts": "Ver productos",
+    "add": "Agregar"
   },
   "demoScreen": {
     "howTo": "HOW TO",

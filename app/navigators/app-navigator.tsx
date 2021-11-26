@@ -8,7 +8,8 @@ import React from "react"
 import { useColorScheme } from "react-native"
 import { NavigationContainer, DefaultTheme, DarkTheme } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import { ProductScreen } from "../screens"
+import { ProductFormScreen, ProductScreen, SaleFormScreen, SaleScreen } from "../screens"
+import { WelcomeScreen } from "../screens"
 import { navigationRef } from "./navigation-utilities"
 
 /**
@@ -28,6 +29,9 @@ export type NavigatorParamList = {
   demo: undefined
   demoList: undefined
   product: undefined
+  productForm: undefined
+  sale: undefined
+  saleForm: undefined
 }
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
@@ -39,9 +43,13 @@ const AppStack = () => {
       screenOptions={{
         headerShown: false,
       }}
-      initialRouteName="product"
+      initialRouteName="welcome"
     >
+      <Stack.Screen name="welcome" component={WelcomeScreen} />
       <Stack.Screen name="product" component={ProductScreen} />
+      <Stack.Screen name="productForm" component={ProductFormScreen} />
+      <Stack.Screen name="saleForm" component={SaleFormScreen} />
+      <Stack.Screen name="sale" component={SaleScreen} />
     </Stack.Navigator>
   )
 }
