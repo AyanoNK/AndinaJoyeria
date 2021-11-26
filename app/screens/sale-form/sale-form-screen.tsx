@@ -24,6 +24,7 @@ const HEADER_CONTAINER: ViewStyle = {
 
 const INPUT_CONTAINER: ViewStyle = {
   backgroundColor: color.palette.white,
+  marginBottom: spacing.medium,
 }
 
 export const SaleFormScreen = observer(function SaleFormScreen() {
@@ -80,6 +81,7 @@ export const SaleFormScreen = observer(function SaleFormScreen() {
         }}
         render={({ field }) => (
           <Picker
+            style={{ marginVertical: spacing.medium }}
             onValueChange={(va) => {
               const newValue = getProductDetails(va.toString())
               setValue("items", [newValue])
@@ -111,9 +113,14 @@ export const SaleFormScreen = observer(function SaleFormScreen() {
       />
       {errors.client_email && <Text>Este texto es requerido.</Text>}
 
-      <Button testID="next-screen-button" tx="saleScreen.return" onPress={previousScreen} />
+      <Button
+        style={{ marginBottom: spacing.medium }}
+        tx="saleScreen.return"
+        textStyle={{ fontSize: 16 }}
+        onPress={previousScreen}
+      />
 
-      <Button testID="next-screen-button" tx="saleScreen.add" onPress={handleSubmit(onSubmit)} />
+      <Button textStyle={{ fontSize: 16 }} tx="saleScreen.add" onPress={handleSubmit(onSubmit)} />
     </Screen>
   )
 })
