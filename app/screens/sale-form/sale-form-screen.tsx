@@ -9,6 +9,7 @@ import { useNavigation, CommonActions } from "@react-navigation/core"
 import { useStores } from "../../models"
 import { Controller, useForm } from "react-hook-form"
 import { translate } from "../../i18n"
+import { Picker } from "@react-native-picker/picker"
 
 const ROOT: ViewStyle = {
   flex: 1,
@@ -33,14 +34,19 @@ export const SaleFormScreen = observer(function SaleFormScreen() {
   const navigation = useNavigation()
   const previousScreen = () => navigation.dispatch(CommonActions.goBack())
 
+  const getProductDetails = (id: string) => {
+    return productStore.products.find((product) => product.id === id)
+  }
+
   const {
     handleSubmit,
     control,
+    setValue,
     formState: { errors },
   } = useForm()
 
   const onSubmit = async (data) => {
-    await productStore.postProduct(data).then(() => previousScreen())
+    await saleStore.postSale(data).then(() => previousScreen())
   }
 
   return (
@@ -48,6 +54,45 @@ export const SaleFormScreen = observer(function SaleFormScreen() {
       <View style={HEADER_CONTAINER}>
         <Text preset="header" tx="saleScreen.header" />
       </View>
+
+      <Controller
+        control={control}
+        rules={{
+          required: true,
+        }}
+        render={({ field }) => (
+          <Picker
+            onValueChange={(va) => {
+              const newValue = getProductDetails(va.toString())
+              setValue("items", [newValue])
+            }}
+          >
+            {productStore.products.map((product) => (
+              <Picker.Item label={`${product.name} $${product.price}`} value={product.id} />
+            ))}
+          </Picker>
+        )}
+        name="items"
+      />
+
+      <Controller
+        control={control}
+        rules={{
+          required: true,
+        }}
+        render={({ field: { onChange, onBlur, value } }) => (
+          <TextInput
+            style={INPUT_CONTAINER}
+            onBlur={onBlur}
+            onChangeText={onChange}
+            keyboardType="numeric"
+            placeholder={translate("saleScreen.quantity")}
+            value={value}
+          />
+        )}
+        name="quantity"
+      />
+      {errors.quantity && <Text>Este texto es requerido.</Text>}
 
       <Controller
         control={control}

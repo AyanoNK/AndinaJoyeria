@@ -48,34 +48,39 @@ const prepareProduct = (product: any) => {
   }
 }
 const prepareSale = (sale: any) => {
-  return {
+  const total = sale.items.reduce((total, item) => total + item.price, 0)
+
+  const dataModeler = {
     fields: {
       client_email: {
         stringValue: sale.client_email,
       },
       product: {
         arrayValue: {
-          values: [
-            {
-              mapValue: {
-                fields: {
-                  quantity: {
-                    integerValue: "1",
-                  },
-                  item: {
-                    referenceValue: sale.items[0],
-                  },
-                },
-              },
-            },
-          ],
+          values: [],
         },
       },
       total: {
-        integerValue: sale.total,
+        integerValue: total,
       },
     },
   }
+
+  sale.items.forEach((item) =>
+    dataModeler.fields.product.arrayValue.values.push({
+      mapValue: {
+        fields: {
+          item: { referenceValue: item.id },
+          quantity: {
+            integerValue: "1",
+          },
+        },
+      },
+    }),
+  )
+
+  console.tron.log(dataModeler)
+  return dataModeler
 }
 
 /**
