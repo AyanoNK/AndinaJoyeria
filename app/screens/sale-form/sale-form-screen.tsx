@@ -47,13 +47,14 @@ export const SaleFormScreen = observer(function SaleFormScreen() {
   } = useForm()
 
   useEffect(() => {
+    productStore.getProducts()
     const param = route.params
-    if ("sale" in param) {
-      const sale = saleStore.sales.find((sale) => sale.id === param["sale"])
-      setValue("items", [sale.items])
-      setValue("client_email", sale.client_email)
-      setValue("total", sale.total)
-    }
+    // if ("sale" in param && param["sale"] !== undefined) {
+    //   const sale = saleStore.sales.find((sale) => sale.id === param["sale"])
+    //   setValue("items", [sale.items])
+    //   setValue("client_email", sale.client_email)
+    //   setValue("total", sale.total)
+    // }
   }, [])
 
   const onSubmit = async (data) => {
@@ -61,7 +62,7 @@ export const SaleFormScreen = observer(function SaleFormScreen() {
   }
 
   return (
-    <Screen style={ROOT} preset="scroll">
+    <Screen style={ROOT} preset="fixed">
       <View style={HEADER_CONTAINER}>
         <Text preset="header" tx="saleScreen.header" />
       </View>

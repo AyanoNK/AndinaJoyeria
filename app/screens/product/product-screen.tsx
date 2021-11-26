@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
-import { FlatList, View, ViewStyle } from "react-native"
-import { Button, Screen, Text } from "../../components"
+import { FlatList, ImageStyle, View, ViewStyle } from "react-native"
+import { AutoImage, Button, Icon, Screen, Text } from "../../components"
 // import { useNavigation } from "@react-navigation/native"
-import { Product, Sale, useStores } from "../../models"
+import { Product, useStores } from "../../models"
 import { color, spacing } from "../../theme"
 import { CommonActions, useNavigation } from "@react-navigation/core"
 
@@ -16,17 +16,66 @@ const ROOT: ViewStyle = {
 const HEADER_CONTAINER: ViewStyle = {
   marginTop: spacing.huge,
   marginBottom: spacing.medium,
+  display: "flex",
+  flexDirection: "row",
+}
+
+const LIST_ITEM_CONTAINER: ViewStyle = {
+  flex: 1,
+  flexDirection: "row",
+  backgroundColor: color.palette.darkBlue,
+  marginVertical: spacing.small,
+  borderRadius: spacing.small,
+}
+
+const LIST_TEXT_CONTAINER: ViewStyle = {
+  width: "80%",
+  flex: 1,
+  justifyContent: "center",
+}
+
+const LIST_LABEL_CONTAINER: ViewStyle = {
+  flex: 1,
+  flexDirection: "column",
+}
+
+const LIST_IMAGE_CONTAINER: ViewStyle = {
+  width: "20%",
+}
+
+const IMAGE_BORDER: ViewStyle = {
+  width: 55,
+  height: 55,
+  padding: 5,
+  borderWidth: 1,
+  borderColor: color.palette.white,
+  borderTopLeftRadius: 5,
+  borderBottomLeftRadius: 5,
+}
+
+const IMAGE_STYLE: ImageStyle = {
+  width: "100%",
+  flex: 1,
+  justifyContent: "center",
+  alignItems: "center",
+  height: "40px",
+  resizeMode: "contain",
+}
+
+const FLAT_LIST_STYLE = {
+  maxHeight: "70%",
+  backgroundColor: color.palette.darkBlue,
+  borderRadius: 5,
 }
 
 export const ProductScreen = observer(function ProductScreen() {
   // Pull in one of our MST stores
   // const { someStore, anotherStore } = useStores()
-  const { productStore, saleStore } = useStores()
+  const { productStore } = useStores()
   const [refreshing, setRefreshing] = useState(false)
 
   useEffect(() => {
     fetchProducts()
-    fetchSales()
   }, [])
 
   const fetchProducts = () => {
@@ -34,32 +83,36 @@ export const ProductScreen = observer(function ProductScreen() {
     productStore.getProducts()
     setRefreshing(false)
   }
-  const fetchSales = () => {
-    setRefreshing(true)
-    saleStore.getSales()
-    setRefreshing(false)
-  }
-
   const renderProduct = ({ item }) => {
     const product: Product = item
     return (
-      <View>
-        <Text text={product.name} />
-      </View>
-    )
-  }
-  const renderSale = ({ item }) => {
-    const sale: Sale = item
-    return (
-      <View>
-        <Text text={sale.client_email} />
+      <View style={LIST_ITEM_CONTAINER}>
+        <View style={LIST_IMAGE_CONTAINER}>
+          <View style={IMAGE_BORDER}>
+            <AutoImage source={item.picture} style={IMAGE_STYLE} />
+          </View>
+        </View>
+
+        <View style={LIST_TEXT_CONTAINER}>
+          <View style={LIST_LABEL_CONTAINER}>
+            <Text text={product.name} preset="bold" />
+            <Text text={`ID ${product.id.split("/").at(-1)}`} preset="secondary" />
+            <Text text={`$${product.price}`} preset="secondary" />
+            <Text text={`${product.stock} en inventario`} preset="secondary" />
+          </View>
+        </View>
       </View>
     )
   }
 
   const navigation = useNavigation()
 
-  const previousScreen = () => navigation.dispatch(CommonActions.goBack())
+  const previousScreen = () =>
+    navigation.dispatch(
+      CommonActions.navigate({
+        name: "sale",
+      }),
+    )
   const productFormScreen = () =>
     navigation.dispatch(
       CommonActions.navigate({
@@ -68,24 +121,42 @@ export const ProductScreen = observer(function ProductScreen() {
     )
   // Pull in navigation via hook
   return (
-    <Screen style={ROOT} preset="scroll">
+    <Screen style={ROOT} preset="fixed">
       <View style={HEADER_CONTAINER}>
-        <Text preset="header" tx="productScreen.header" />
+        <View>
+          <Button onPress={previousScreen}>
+            <Icon icon="back" style={{ height: 30 }} />
+          </Button>
+        </View>
+        <View>
+          <Text preset="header" tx="productScreen.header" />
+        </View>
       </View>
-      <FlatList
-        data={productStore.products}
-        renderItem={renderProduct}
-        keyExtractor={(item) => item.id}
-        onRefresh={fetchProducts}
-        refreshing={refreshing}
-      />
-      <Button testID="next-screen-button" tx="productScreen.return" onPress={previousScreen} />
-      <Button
-        testID="next-screen-button"
-        style={{ marginTop: 30 }}
-        tx="productScreen.add"
-        onPress={productFormScreen}
-      />
+      <View style={{ flex: 1, justifyContent: "space-around" }}>
+        <FlatList
+          data={productStore.products}
+          renderItem={renderProduct}
+          keyExtractor={(item) => item.id}
+          onRefresh={fetchProducts}
+          refreshing={refreshing}
+          style={FLAT_LIST_STYLE}
+        />
+        <View style={{ height: "10%" }}>
+          <View style={{ flex: 1, justifyContent: "space-evenly" }}>
+            <Button
+              testID="next-screen-button"
+              tx="productScreen.return"
+              onPress={previousScreen}
+            />
+            <Button
+              testID="next-screen-button"
+              style={{ marginTop: 30 }}
+              tx="productScreen.add"
+              onPress={productFormScreen}
+            />
+          </View>
+        </View>
+      </View>
     </Screen>
   )
 })

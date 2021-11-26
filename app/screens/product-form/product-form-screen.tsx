@@ -51,7 +51,7 @@ export const ProductFormScreen = observer(function ProductFormScreen() {
   }
 
   return (
-    <Screen style={ROOT} preset="scroll">
+    <Screen style={ROOT} preset="fixed">
       <View style={HEADER_CONTAINER}>
         <Text preset="header" tx="productScreen.header" />
       </View>
