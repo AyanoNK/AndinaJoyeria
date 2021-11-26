@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
-import { FlatList, ImageStyle, View, ViewStyle } from "react-native"
+import { FlatList, TextStyle, TextStyleAndroid, View, ViewStyle } from "react-native"
 import { Button, Screen, Text } from "../../components"
-// import { useNavigation } from "@react-navigation/native"
-// import { useStores } from "../../models"
 import { color, spacing } from "../../theme"
 import { Sale, useStores } from "../../models"
 import { useNavigation, CommonActions } from "@react-navigation/core"
@@ -40,14 +38,16 @@ const LIST_LABEL_CONTAINER: ViewStyle = {
   paddingVertical: spacing.small,
 }
 
+const ACTION_BUTTON_STYLE: TextStyle = {
+  paddingHorizontal: spacing.small,
+}
+
 const FLAT_LIST_STYLE = {
   maxHeight: "70%",
-  backgroundColor: color.palette.darkBlue,
   borderRadius: 5,
 }
 export const SaleScreen = observer(function SaleScreen() {
   // Pull in one of our MST stores
-  // const { someStore, anotherStore } = useStores()
   const { saleStore, productStore } = useStores()
   const [refreshing, setRefreshing] = useState(false)
 
@@ -58,14 +58,22 @@ export const SaleScreen = observer(function SaleScreen() {
   const fetchSales = () => {
     setRefreshing(true)
     saleStore.getSales()
+    productStore.getProducts()
     setRefreshing(false)
+  }
+
+  const handleDeleteSale = (sale: Sale) => {
+    saleStore.deleteSale(
+      sale.id.split("/").at(-1),
+      saleStore.sales.filter((s) => s.id !== sale.id),
+    )
+    fetchSales()
   }
 
   const renderSale = ({ item }) => {
     const sale: Sale = item
 
     const relatedProduct = productStore.products.find((product) => product.id === sale.items[0])
-    console.tron.log(relatedProduct)
     return (
       <View style={LIST_ITEM_CONTAINER}>
         <View style={LIST_TEXT_CONTAINER}>
@@ -76,6 +84,16 @@ export const SaleScreen = observer(function SaleScreen() {
             <Text text={`a: ${sale.client_email}`} preset="secondary" />
           </View>
         </View>
+        <Button
+          tx="saleScreen.edit"
+          onPress={() => saleFormScreen(sale)}
+          style={ACTION_BUTTON_STYLE}
+        />
+        <Button
+          tx="saleScreen.delete"
+          style={{ ...ACTION_BUTTON_STYLE, backgroundColor: color.palette.angry }}
+          onPress={() => handleDeleteSale(sale)}
+        />
       </View>
     )
   }
@@ -109,14 +127,19 @@ export const SaleScreen = observer(function SaleScreen() {
         </View>
       </View>
       <View style={{ flex: 1, justifyContent: "space-around" }}>
-        <FlatList
-          data={saleStore.sales}
-          renderItem={renderSale}
-          keyExtractor={(item) => item.id}
-          onRefresh={fetchSales}
-          refreshing={refreshing}
-          style={FLAT_LIST_STYLE}
-        />
+        {saleStore.sales.length > 0 ? (
+          <FlatList
+            data={saleStore.sales}
+            renderItem={renderSale}
+            keyExtractor={(item) => item.id}
+            onRefresh={fetchSales}
+            refreshing={refreshing}
+            style={FLAT_LIST_STYLE}
+          />
+        ) : (
+          <Text tx="saleScreen.noData" />
+        )}
+
         <View style={{ height: "10%" }}>
           <View style={{ flex: 1, justifyContent: "space-evenly" }}>
             <Button testID="next-screen-button" tx="saleScreen.add" onPress={saleFormScreen} />

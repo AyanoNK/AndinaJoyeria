@@ -200,6 +200,22 @@ export class Api {
     }
   }
 
+  async deleteSale(sale: string) {
+    // make the api call
+    const response: ApiResponse<any> = await this.apisauce.delete(`/sale/${sale}`)
+    // the typical ways to die when calling an api
+    if (!response.ok) {
+      const problem = getGeneralApiProblem(response)
+      if (problem) return problem
+    }
+
+    try {
+      return { kind: "ok" }
+    } catch {
+      return { kind: "bad-data" }
+    }
+  }
+
   /**
    * Gets a list of users.
    */

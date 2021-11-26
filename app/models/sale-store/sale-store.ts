@@ -2,8 +2,9 @@ import { Instance, SnapshotOut, types } from "mobx-state-tree"
 import { SaleModel } from "../sale/sale"
 import { withEnvironment } from "../extensions/with-environment"
 import { Sale, SaleSnapshot } from ".."
-import { flow } from "mobx"
+import { flow } from "mobx-state-tree"
 import { GetSalesResult, PostSaleResult } from "../../services/api"
+import { SaleFormScreen } from "../../screens"
 
 /**
  * Model description here for TypeScript hints.
@@ -24,7 +25,6 @@ export const SaleStoreModel = types
   .actions((self) => ({
     getSales: flow(function* () {
       const result: GetSalesResult = yield self.environment.api.getSales()
-
       if (result.kind === "ok") {
         self.saveSales(result.sales)
       } else {
@@ -39,6 +39,17 @@ export const SaleStoreModel = types
         self.saveSales(result.sales)
       } else {
         __DEV__ && console.tron.log(result.kind)
+      }
+    }),
+  }))
+  .actions((self) => ({
+    deleteSale: flow(function* (data: string, newSales: Sale[]) {
+      const result: PostSaleResult = yield self.environment.api.deleteSale(data)
+
+      if (result.kind !== "ok") {
+        __DEV__ && console.tron.log(result.kind)
+      } else {
+        self.sales.replace(newSales)
       }
     }),
   }))

@@ -64,7 +64,6 @@ const IMAGE_STYLE: ImageStyle = {
 
 const FLAT_LIST_STYLE = {
   maxHeight: "70%",
-  backgroundColor: color.palette.darkBlue,
   borderRadius: 5,
 }
 

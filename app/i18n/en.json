@@ -28,7 +28,9 @@
     "clientEmail": "Email del cliente",
     "quantity": "Cantidad",
     "add": "Agregar",
-    "edit": "Editar"
+    "edit": "Editar",
+    "delete": "Borrar",
+    "noData": "No hay datos"
   },
   "demoScreen": {
     "howTo": "HOW TO",

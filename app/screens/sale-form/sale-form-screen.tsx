@@ -49,12 +49,14 @@ export const SaleFormScreen = observer(function SaleFormScreen() {
   useEffect(() => {
     productStore.getProducts()
     const param = route.params
-    // if ("sale" in param && param["sale"] !== undefined) {
-    //   const sale = saleStore.sales.find((sale) => sale.id === param["sale"])
-    //   setValue("items", [sale.items])
-    //   setValue("client_email", sale.client_email)
-    //   setValue("total", sale.total)
-    // }
+    if ("sale" in param) {
+      const sale = saleStore.sales.find((sale) => sale.id === param["sale"])
+      if (sale) {
+        setValue("items", [sale.items])
+        setValue("client_email", sale.client_email)
+        setValue("total", sale.total)
+      }
+    }
   }, [])
 
   const onSubmit = async (data) => {
@@ -86,25 +88,6 @@ export const SaleFormScreen = observer(function SaleFormScreen() {
         )}
         name="items"
       />
-
-      <Controller
-        control={control}
-        rules={{
-          required: true,
-        }}
-        render={({ field: { onChange, onBlur, value } }) => (
-          <TextInput
-            style={INPUT_CONTAINER}
-            onBlur={onBlur}
-            onChangeText={onChange}
-            keyboardType="numeric"
-            placeholder={translate("saleScreen.quantity")}
-            value={value}
-          />
-        )}
-        name="quantity"
-      />
-      {errors.quantity && <Text>Este texto es requerido.</Text>}
 
       <Controller
         control={control}
