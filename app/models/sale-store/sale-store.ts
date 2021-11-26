@@ -3,7 +3,7 @@ import { SaleModel } from "../sale/sale"
 import { withEnvironment } from "../extensions/with-environment"
 import { Sale, SaleSnapshot } from ".."
 import { flow } from "mobx"
-import { GetSalesResult } from "../../services/api"
+import { GetSalesResult, PostSaleResult } from "../../services/api"
 
 /**
  * Model description here for TypeScript hints.
@@ -25,6 +25,16 @@ export const SaleStoreModel = types
     getSales: flow(function* () {
       const result: GetSalesResult = yield self.environment.api.getSales()
 
+      if (result.kind === "ok") {
+        self.saveSales(result.sales)
+      } else {
+        __DEV__ && console.tron.log(result.kind)
+      }
+    }),
+  }))
+  .actions((self) => ({
+    postSale: flow(function* (data: Sale) {
+      const result: PostSaleResult = yield self.environment.api.postSale(data)
       if (result.kind === "ok") {
         self.saveSales(result.sales)
       } else {

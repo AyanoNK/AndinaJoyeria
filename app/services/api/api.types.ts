@@ -15,3 +15,4 @@ export type GetCharacterResult = { kind: "ok"; character: Character } | GeneralA
 export type GetProductsResult = { kind: "ok"; products: ProductSnapshot[] } | GeneralApiProblem
 export type PostProductResult = { kind: "ok"; products: ProductSnapshot[] } | GeneralApiProblem
 export type GetSalesResult = { kind: "ok"; sales: SaleSnapshot[] } | GeneralApiProblem
+export type PostSaleResult = { kind: "ok"; sales: SaleSnapshot[] } | GeneralApiProblem

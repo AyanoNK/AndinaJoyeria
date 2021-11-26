@@ -25,6 +25,7 @@
     "header": "Ventas",
     "return": "Volver",
     "seeProducts": "Ver productos",
+    "clientEmail": "Email del cliente",
     "add": "Agregar"
   },
   "demoScreen": {

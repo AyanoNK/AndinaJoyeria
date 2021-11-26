@@ -48,7 +48,6 @@ export const ProductFormScreen = observer(function ProductFormScreen() {
 
   const onSubmit = async (data) => {
     await productStore.postProduct(data).then(() => SaleScreen())
-    SaleScreen()
   }
 
   return (
