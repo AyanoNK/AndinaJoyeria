@@ -33,10 +33,10 @@ export const ProductFormScreen = observer(function ProductFormScreen() {
   const navigation = useNavigation()
   const previousScreen = () => navigation.dispatch(CommonActions.goBack())
 
-  const SaleScreen = () =>
+  const productScreen = () =>
     navigation.dispatch(
       CommonActions.navigate({
-        name: "sale",
+        name: "product",
       }),
     )
 
@@ -47,7 +47,7 @@ export const ProductFormScreen = observer(function ProductFormScreen() {
   } = useForm()
 
   const onSubmit = async (data) => {
-    await productStore.postProduct(data).then(() => SaleScreen())
+    await productStore.postProduct(data).then(() => productScreen())
   }
 
   return (

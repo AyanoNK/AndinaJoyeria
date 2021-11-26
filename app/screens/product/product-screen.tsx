@@ -54,11 +54,11 @@ const IMAGE_BORDER: ViewStyle = {
 }
 
 const IMAGE_STYLE: ImageStyle = {
-  width: "100%",
+  width: 40,
   flex: 1,
   justifyContent: "center",
   alignItems: "center",
-  height: "40px",
+  height: 40,
   resizeMode: "contain",
 }
 
@@ -88,14 +88,14 @@ export const ProductScreen = observer(function ProductScreen() {
       <View style={LIST_ITEM_CONTAINER}>
         <View style={LIST_IMAGE_CONTAINER}>
           <View style={IMAGE_BORDER}>
-            <AutoImage source={item.picture} style={IMAGE_STYLE} />
+            <AutoImage source={{ uri: product.picture }} style={IMAGE_STYLE} />
           </View>
         </View>
 
         <View style={LIST_TEXT_CONTAINER}>
           <View style={LIST_LABEL_CONTAINER}>
             <Text text={product.name} preset="bold" />
-            <Text text={`ID ${product.id.split("/").at(-1)}`} preset="secondary" />
+            <Text text={`ID ${product.id.split("/")[6]}`} preset="secondary" />
             <Text text={`$${product.price}`} preset="secondary" />
             <Text text={`${product.stock} en inventario`} preset="secondary" />
           </View>
@@ -123,23 +123,22 @@ export const ProductScreen = observer(function ProductScreen() {
     <Screen style={ROOT} preset="fixed">
       <View style={HEADER_CONTAINER}>
         <View>
-          <Button onPress={previousScreen}>
-            <Icon icon="back" style={{ height: 30 }} />
-          </Button>
-        </View>
-        <View>
           <Text preset="header" tx="productScreen.header" />
         </View>
       </View>
       <View style={{ flex: 1, justifyContent: "space-around" }}>
-        <FlatList
-          data={productStore.products}
-          renderItem={renderProduct}
-          keyExtractor={(item) => item.id}
-          onRefresh={fetchProducts}
-          refreshing={refreshing}
-          style={FLAT_LIST_STYLE}
-        />
+        {productStore.products.length > 0 ? (
+          <FlatList
+            data={productStore.products}
+            renderItem={renderProduct}
+            keyExtractor={(item) => item.id}
+            onRefresh={fetchProducts}
+            refreshing={refreshing}
+            style={FLAT_LIST_STYLE}
+          />
+        ) : (
+          <Text text="No hay productos" />
+        )}
         <View style={{ height: "10%" }}>
           <View style={{ flex: 1, justifyContent: "space-evenly" }}>
             <Button

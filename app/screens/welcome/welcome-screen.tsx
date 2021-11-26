@@ -1,5 +1,12 @@
 import React, { FC } from "react"
-import { View, ViewStyle, TextStyle, ImageStyle, SafeAreaView } from "react-native"
+import {
+  View,
+  ViewStyle,
+  TextStyle,
+  ImageStyle,
+  SafeAreaView,
+  TouchableOpacity,
+} from "react-native"
 import { StackScreenProps } from "@react-navigation/stack"
 import { observer } from "mobx-react-lite"
 import { Button, AutoImage as Image } from "../../components"
@@ -18,22 +25,8 @@ const BOLD: TextStyle = { fontWeight: "bold" }
 
 const BOWSER: ImageStyle = {
   alignSelf: "center",
-  marginVertical: spacing[5],
-  maxWidth: "50%",
   width: "100%",
-  height: 300,
-}
-
-const CONTINUE: ViewStyle = {
-  paddingVertical: spacing[4],
-  paddingHorizontal: spacing[4],
-  backgroundColor: color.palette.deepPurple,
-}
-const CONTINUE_TEXT: TextStyle = {
-  ...TEXT,
-  ...BOLD,
-  fontSize: 13,
-  letterSpacing: 2,
+  height: 720,
 }
 
 export const WelcomeScreen: FC<StackScreenProps<NavigatorParamList, "welcome">> = observer(
@@ -42,15 +35,9 @@ export const WelcomeScreen: FC<StackScreenProps<NavigatorParamList, "welcome">> 
 
     return (
       <View testID="WelcomeScreen" style={FULL}>
-        <Image source={WelcomePNG} style={BOWSER} />
-
-        <Button
-          testID="next-screen-button"
-          style={CONTINUE}
-          textStyle={CONTINUE_TEXT}
-          tx="welcomeScreen.continue"
-          onPress={nextScreen}
-        />
+        <TouchableOpacity onPress={nextScreen}>
+          <Image source={WelcomePNG} style={BOWSER} />
+        </TouchableOpacity>
       </View>
     )
   },

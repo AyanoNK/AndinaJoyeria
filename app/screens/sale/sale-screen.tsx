@@ -64,7 +64,7 @@ export const SaleScreen = observer(function SaleScreen() {
 
   const handleDeleteSale = (sale: Sale) => {
     saleStore.deleteSale(
-      sale.id.split("/").at(-1),
+      sale.id.split("/")[6],
       saleStore.sales.filter((s) => s.id !== sale.id),
     )
     fetchSales()
@@ -79,7 +79,7 @@ export const SaleScreen = observer(function SaleScreen() {
         <View style={LIST_TEXT_CONTAINER}>
           <View style={LIST_LABEL_CONTAINER}>
             <Text text={`Venta del artículo: ${relatedProduct.name}`} />
-            <Text text={`ID ${sale.id.split("/").at(-1)}`} preset="secondary" />
+            <Text text={`ID ${sale.id.split("/")[6]}`} preset="secondary" />
             <Text text={`$${sale.total}`} preset="secondary" />
             <Text text={`a: ${sale.client_email}`} preset="secondary" />
           </View>
@@ -118,7 +118,12 @@ export const SaleScreen = observer(function SaleScreen() {
       }),
     )
 
-  const previousScreen = () => navigation.dispatch(CommonActions.goBack())
+  const previousScreen = () =>
+    navigation.dispatch(
+      CommonActions.navigate({
+        name: "welcome",
+      }),
+    )
 
   return (
     <Screen style={ROOT} preset="fixed">

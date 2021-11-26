@@ -62,7 +62,7 @@ export const SaleFormScreen = observer(function SaleFormScreen() {
 
   const onSubmit = async (data) => {
     if ("sale" in param) {
-      await saleStore.updateSale(param["sale"].split("/").at(-1), data).then(() => previousScreen())
+      await saleStore.updateSale(param["sale"].split("/")[6], data).then(() => previousScreen())
     } else {
       await saleStore.postSale(data).then(() => previousScreen())
     }
