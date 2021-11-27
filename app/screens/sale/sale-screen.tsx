@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
-import { FlatList, TextStyle, View, ViewStyle } from "react-native"
+import { FlatList, TextStyle, TouchableOpacity, View, ViewStyle, Linking } from "react-native"
 import { Button, Screen, Text } from "../../components"
 import { color, spacing } from "../../theme"
 import { Sale, useStores } from "../../models"
@@ -70,6 +70,10 @@ export const SaleScreen = observer(function SaleScreen() {
     fetchSales()
   }
 
+  const copyToClipboard = (email: string) => {
+    Linking.openURL(`mailto:${email}`)
+  }
+
   const renderSale = ({ item }) => {
     const sale: Sale = item
 
@@ -81,7 +85,9 @@ export const SaleScreen = observer(function SaleScreen() {
             <Text text={`Venta del artículo: ${relatedProduct.name}`} />
             <Text text={`ID ${sale.id.split("/")[6]}`} preset="secondary" />
             <Text text={`$${sale.total}`} preset="secondary" />
-            <Text text={`a: ${sale.client_email}`} preset="secondary" />
+            <TouchableOpacity onPress={() => copyToClipboard(sale.client_email)}>
+              <Text text={`a: ${sale.client_email}`} preset="secondary" />
+            </TouchableOpacity>
           </View>
         </View>
         <Button
